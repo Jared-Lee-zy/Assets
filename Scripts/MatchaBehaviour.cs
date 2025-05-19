@@ -2,12 +2,13 @@ using UnityEngine;
 
 public class MatchaBehaviour : MonoBehaviour
 {
-
+    [SerializeField]
     int matchaValue = 1;
 
 
-    public void collect(PlayerBehaviour player)
+    public void Collect(PlayerBehaviour player)
     {
+        Debug.Log("Matcha Collected");
         player.ModifyScore(matchaValue);
         Destroy(gameObject);
     }

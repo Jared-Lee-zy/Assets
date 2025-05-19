@@ -11,16 +11,23 @@ public class PlayerBehaviour : MonoBehaviour
 
     MatchaBehaviour currentMatcha;
 
+    DoorBehaviour currentDoor;
+
 
     void OnInteract()
     {
         if(canInteract)
         {
-            Debug.Log("Interacting...");
-            currentMatcha.collect(this);
-            Debug.Log("Score: "+score);
-            canInteract = false;
-            currentMatcha = null;
+            if(currentMatcha != null)
+            {
+                Debug.Log("Interacting with Matcha...");
+                currentMatcha.Collect(this);
+            }
+            else if(currentDoor != null)
+            {
+                Debug.Log("Interacting with Door...");
+                currentDoor.Interact();
+            }
         }
     }
 
@@ -31,12 +38,16 @@ public class PlayerBehaviour : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.gameObject.name + " entered the trigger");
-        if(other.gameObject.CompareTag("Matcha"))
+        Debug.Log(other.gameObject.name);
+        if(other.CompareTag("Matcha"))
         {
-            Debug.Log("Matcha detected");
             canInteract = true;
-            currentMatcha = other.gameObject.GetComponent<MatchaBehaviour>();
+            currentMatcha = other.GetComponent<MatchaBehaviour>();
+        }
+        else if(other.CompareTag("Door"))
+        {
+            canInteract = true;
+            currentDoor = other.GetComponent<DoorBehaviour>();
         }
     }
 
