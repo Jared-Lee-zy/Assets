@@ -1,4 +1,7 @@
+
+using System;
 using UnityEngine;
+using TMPro;
 
 public class PlayerBehaviour : MonoBehaviour
 {
@@ -12,6 +15,11 @@ public class PlayerBehaviour : MonoBehaviour
     MatchaBehaviour currentMatcha;
 
     DoorBehaviour currentDoor;
+
+    [SerializeField]
+    TextMeshProUGUI scoreText;
+
+    int currentMatchaCount = 0;
 
     [SerializeField]
     GameObject projectile;
@@ -44,6 +52,7 @@ public class PlayerBehaviour : MonoBehaviour
     public void ModifyScore(int amount)
     {
         score += amount;
+        scoreText.text = "SCORE: " + score.ToString();
     }
 
     void OnTriggerEnter(Collider other)
@@ -87,14 +96,14 @@ public class PlayerBehaviour : MonoBehaviour
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
+    void Start()
     {
-        
+        scoreText.text = "SCORE: " + score.ToString();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }
