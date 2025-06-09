@@ -125,6 +125,9 @@ MonoBehaviour:
   matchaValue: 1
   collectSound: {fileID: 8300000, guid: 968803e4b5515644da8588a0e22f67c7, type: 3}
   highlightMat: {fileID: 2100000, guid: 2dd72ad34b181614a8fb19c6bd042860, type: 2}
+  floatAmplitude: 0.15
+  floatFrequency: 1
+  rotationSpeed: 50
 --- !u!54 &8504380758459628986
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -3,18 +3,18 @@ using UnityEngine;
 public class giftBox : MonoBehaviour
 {
     [SerializeField]
-    GameObject gift;
+    GameObject matchaPrefab;
 
     [SerializeField]
     Transform spawnPoint;
     void OnCollisionEnter(Collision collision)
     {
+
         if (collision.gameObject.CompareTag("Projectile"))
         {
-            GameObject newGiftBox = Instantiate(gift, spawnPoint.position, spawnPoint.rotation);
+            Instantiate(matchaPrefab, spawnPoint.position, spawnPoint.rotation);
+            Destroy(collision.gameObject);
             Destroy(gameObject);
-            GameObject bullet = collision.gameObject;
-            Destroy(bullet);
 
         }
         
