@@ -1,4 +1,3 @@
-
 using System;
 using UnityEngine;
 using TMPro;
@@ -18,6 +17,9 @@ public class PlayerBehaviour : MonoBehaviour
 
     [SerializeField]
     TextMeshProUGUI scoreText;
+
+    [SerializeField]
+    TextMeshProUGUI interactText;
 
     int currentMatchaCount = 0;
 
