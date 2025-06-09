@@ -8,12 +8,16 @@ public class MatchaBehaviour : MonoBehaviour
     MeshRenderer myMeshRenderer;
 
     [SerializeField]
+    AudioClip collectSound;
+
+    [SerializeField]
     Material highlightMat;
 
     Material originalMat;
 
     public void Collect(PlayerBehaviour player)
     {
+        AudioSource.PlayClipAtPoint(collectSound, transform.position);
         Debug.Log("Matcha Collected");
         player.ModifyScore(matchaValue);
         Destroy(gameObject);
