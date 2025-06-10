@@ -5,15 +5,10 @@ using TMPro;
 public class PlayerBehaviour : MonoBehaviour
 {
 
-    int health = 100;
-
     int score = 0;
-
-    bool canInteract = false;
 
     MatchaBehaviour currentMatcha;
 
-    DoorBehaviour currentDoor;
 
     [SerializeField]
     TextMeshProUGUI scoreText;
@@ -21,34 +16,32 @@ public class PlayerBehaviour : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI interactText;
 
-    int currentMatchaCount = 0;
-
     [SerializeField]
     GameObject projectile;
 
     [SerializeField]
     Transform spawnPoint;
-    
+
     [SerializeField]
     float fireStrength = 0f;
 
+    [SerializeField]
+    float interactionDistance = 5f;
 
-    void OnInteract()
+    float interactCooldown = 0.2f;
+    float lastInteractTime = -1f;
+
+    bool hasKeycard = false;
+
+    public void PickupKeycard()
     {
-        if(canInteract)
-        {
-            if (currentMatcha != null)
-            {
-                Debug.Log("Interacting with Matcha...");
-                currentMatcha.Collect(this);
-                Debug.Log(score);
-            }
-            else if (currentDoor != null)
-            {
-                Debug.Log("Interacting with Door...");
-                currentDoor.Interact();
-            }
-        }
+        hasKeycard = true;
+        Debug.Log("Keycard picked up!");
+    }
+
+    public bool Haskeycard()
+    {
+        return hasKeycard;
     }
 
     public void ModifyScore(int amount)
@@ -57,34 +50,6 @@ public class PlayerBehaviour : MonoBehaviour
         scoreText.text = "SCORE: " + score.ToString();
     }
 
-    void OnTriggerEnter(Collider other)
-    {
-        Debug.Log(other.gameObject.name);
-        if (other.CompareTag("Matcha"))
-        {
-            canInteract = true;
-            currentMatcha = other.GetComponent<MatchaBehaviour>();
-            currentMatcha.Highlight();
-        }
-        else if (other.CompareTag("Door"))
-        {
-            canInteract = true;
-            currentDoor = other.GetComponent<DoorBehaviour>();
-        }
-    }
-
-    void OnTriggetExit(Collider other)
-    {
-        if (currentMatcha != null)
-        {
-            if (other.gameObject == currentMatcha.gameObject)
-            {
-                canInteract = false;
-                currentMatcha.Unhighlight();
-                currentMatcha = null;
-            }
-        }
-    }
 
     void OnFire()
 
@@ -97,15 +62,141 @@ public class PlayerBehaviour : MonoBehaviour
         newProjectile.GetComponent<Rigidbody>().AddForce(fireForce);
     }
 
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         scoreText.text = "SCORE: " + score.ToString();
+        interactText.enabled = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        RaycastHit hitInfo;
+        bool isLookingAtInteractable = false;
 
+        Debug.DrawRay(spawnPoint.position, spawnPoint.forward * interactionDistance, Color.red);
+
+        if (Physics.Raycast(spawnPoint.position, spawnPoint.forward, out hitInfo, interactionDistance))
+        {
+            GameObject hitObject = hitInfo.collider.gameObject;
+
+            // Matcha Interaction
+            if (hitObject.CompareTag("Matcha"))
+            {
+                MatchaBehaviour matcha = hitObject.GetComponent<MatchaBehaviour>();
+                if (matcha != null)
+                {
+                    if (currentMatcha != matcha)
+                    {
+                        if (currentMatcha != null)
+                            currentMatcha.Unhighlight();
+
+                        currentMatcha = matcha;
+                        currentMatcha.Highlight();
+                    }
+
+                    isLookingAtInteractable = true;
+
+                    if (Input.GetKeyDown(KeyCode.E) && Time.time - lastInteractTime > interactCooldown)
+                    {
+                        lastInteractTime = Time.time;
+                        matcha.Collect(this);
+                        currentMatcha = null;
+                    }
+                }
+            }
+
+            // Keycard Interaction
+            else if (hitObject.CompareTag("Keycard"))
+            {
+                keycardBehaviour keycard = hitObject.GetComponent<keycardBehaviour>();
+                if (keycard != null)
+                {
+                    interactText.text = "Press E to pick up Keycard";
+                    interactText.enabled = true;
+                    isLookingAtInteractable = true;
+
+                    if (Input.GetKeyDown(KeyCode.E) && Time.time - lastInteractTime > interactCooldown)
+                    {
+                        lastInteractTime = Time.time;
+                        keycard.Collect(this);
+                        interactText.enabled = false;
+                    }
+                }
+
+                else
+                {
+                    // If the keycardBehaviour component is missing, log a warning
+                    Debug.LogWarning("Keycard object found but keycardBehaviour component is missing on: " + hitObject.name);
+                }
+
+            }
+
+            // Locked Door Interaction
+            else if (hitObject.CompareTag("LockedDoor"))
+            {
+                LockedDoorBehaviour lockedDoor = hitObject.GetComponent<LockedDoorBehaviour>();
+                if (lockedDoor != null)
+                {
+                    interactText.text = "Press E to Unlock Door";
+                    interactText.enabled = true;
+                    isLookingAtInteractable = true;
+                    if (Input.GetKeyDown(KeyCode.E) && Time.time - lastInteractTime > interactCooldown)
+                    {
+                        lastInteractTime = Time.time;
+                        lockedDoor.Unlock(this);
+                        interactText.enabled = false;
+                    }
+                }
+
+                else
+                {
+                    // If the LockedDoorBehaviour component is missing, log a warning
+                    Debug.LogWarning("LockedDoor object found but LockedDoorBehaviour component is missing on: " + hitObject.name);
+                }
+
+            }
+
+            // Normal Door Interaction
+            else if (hitObject.CompareTag("Door"))
+            {
+                DoorBehaviour door = hitObject.GetComponent<DoorBehaviour>();
+                if (door != null)
+                {
+                    interactText.text = "Press E to Open/Close Door";
+                    interactText.enabled = true;
+                    isLookingAtInteractable = true;
+
+                    if (Input.GetKeyDown(KeyCode.E) && Time.time - lastInteractTime > interactCooldown)
+                    {
+                        lastInteractTime = Time.time;
+                        door.Interact();
+                        interactText.enabled = false;
+                    }
+                }
+                
+                else
+                {
+                    // If the DoorBehaviour component is missing, log a warning
+                Debug.LogWarning("Door object found but DoorBehaviour component is missing on: " + hitObject.name);
+                }
+
+            }
+        }
+
+        // Clear highlights and UI if not looking at an interactable
+        if (!isLookingAtInteractable)
+        {
+            if (currentMatcha != null)
+            {
+                currentMatcha.Unhighlight();
+                currentMatcha = null;
+            }
+
+            interactText.enabled = false;
+        }
     }
 }
