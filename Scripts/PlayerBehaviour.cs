@@ -31,6 +31,8 @@ public class PlayerBehaviour : MonoBehaviour
     float interactCooldown = 0.2f;
     float lastInteractTime = -1f;
 
+    private float lifetime = 2f;
+
     bool hasKeycard = false;
 
     public void PickupKeycard()
@@ -60,6 +62,8 @@ public class PlayerBehaviour : MonoBehaviour
         Vector3 fireForce = spawnPoint.forward * fireStrength;
 
         newProjectile.GetComponent<Rigidbody>().AddForce(fireForce);
+
+        Destroy(newProjectile, lifetime);
     }
 
 
