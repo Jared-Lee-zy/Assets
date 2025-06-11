@@ -8,6 +8,8 @@ public class PlayerBehaviour : MonoBehaviour
 
     int score = 0;
 
+    int deathCount = 0;
+
     MatchaBehaviour currentMatcha;
 
     [SerializeField]
@@ -17,16 +19,22 @@ public class PlayerBehaviour : MonoBehaviour
     TextMeshProUGUI interactText;
 
     [SerializeField]
+    TextMeshProUGUI deathCountText;
+
+    [SerializeField]
     Sprite keycardImage;
 
     [SerializeField]
-     Image keycardUIImage; 
+    Image keycardUIImage;
 
     [SerializeField]
     GameObject projectile;
 
     [SerializeField]
     Transform spawnPoint;
+
+    [SerializeField]
+    Transform respawnPoint;
 
     [SerializeField]
     float fireStrength = 0f;
@@ -94,6 +102,7 @@ public class PlayerBehaviour : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        deathCountText.text = "DEATHS: 0";
         scoreText.text = "SCORE: " + score.ToString();
         interactText.enabled = false;
 
@@ -250,5 +259,31 @@ public class PlayerBehaviour : MonoBehaviour
 
             interactText.enabled = false;
         }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Coffee"))
+        {
+            Debug.Log("Player entered trigger");
+
+            deathCount++;
+            deathCountText.text = "DEATHS: " + deathCount;
+
+            CharacterController cc = GetComponent<CharacterController>();
+            if (cc != null)
+            {
+                cc.enabled = false;
+            }
+
+            transform.position = respawnPoint.position;
+
+            if (cc != null)
+            {
+                cc.enabled = true;
+            }
+
+            Debug.Log("Player respawned at: " + transform.position);
+        }   
     }
 }
