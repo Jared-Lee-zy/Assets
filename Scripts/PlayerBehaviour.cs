@@ -182,7 +182,7 @@ public class PlayerBehaviour : MonoBehaviour
                 LockedDoorBehaviour lockedDoor = hitObject.GetComponent<LockedDoorBehaviour>();
                 if (lockedDoor != null)
                 {
-                    interactText.text = "Press E to Unlock Door";
+                    interactText.text = "Keycard Required! Press E to Unlock";
                     interactText.enabled = true;
                     isLookingAtInteractable = true;
                     if (Input.GetKeyDown(KeyCode.E) && Time.time - lastInteractTime > interactCooldown)
@@ -234,7 +234,7 @@ public class PlayerBehaviour : MonoBehaviour
                 FridgeBehaviour fridge = hitObject.GetComponent<FridgeBehaviour>();
                 if (fridge != null)
                 {
-                    interactText.text = "Press E to talk to fridge?";
+                    interactText.text = "Press E to talk to Fridge?";
                     interactText.enabled = true;
                     isLookingAtInteractable = true;
 
