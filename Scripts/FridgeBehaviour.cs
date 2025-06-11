@@ -5,7 +5,7 @@ public class FridgeBehaviour : MonoBehaviour
     [SerializeField]
     AudioSource fridgeSound;
 
-    public void interact()
+    public void Interact()
     {
         fridgeSound.Play();
     }

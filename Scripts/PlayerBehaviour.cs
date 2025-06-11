@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class PlayerBehaviour : MonoBehaviour
 {
@@ -9,12 +10,17 @@ public class PlayerBehaviour : MonoBehaviour
 
     MatchaBehaviour currentMatcha;
 
-
     [SerializeField]
     TextMeshProUGUI scoreText;
 
     [SerializeField]
     TextMeshProUGUI interactText;
+
+    [SerializeField]
+    Sprite keycardImage;
+
+    [SerializeField]
+     Image keycardUIImage; 
 
     [SerializeField]
     GameObject projectile;
@@ -39,11 +45,28 @@ public class PlayerBehaviour : MonoBehaviour
     {
         hasKeycard = true;
         Debug.Log("Keycard picked up!");
+
+        if (keycardUIImage != null && keycardImage != null)
+        {
+            keycardUIImage.sprite = keycardImage;
+            keycardUIImage.enabled = true;
+        }
+
     }
 
     public bool Haskeycard()
     {
         return hasKeycard;
+    }
+
+    public void UseKeycard()
+    {
+        hasKeycard = false;
+
+        if (keycardUIImage != null)
+        {
+            keycardUIImage.enabled = false;
+        }
     }
 
     public void ModifyScore(int amount)
@@ -73,6 +96,11 @@ public class PlayerBehaviour : MonoBehaviour
     {
         scoreText.text = "SCORE: " + score.ToString();
         interactText.enabled = false;
+
+        if (keycardUIImage != null)
+        {
+            keycardUIImage.enabled = false;
+        }
     }
 
     // Update is called once per frame
@@ -152,6 +180,7 @@ public class PlayerBehaviour : MonoBehaviour
                     {
                         lastInteractTime = Time.time;
                         lockedDoor.Unlock(this);
+                        UseKeycard();
                         interactText.enabled = false;
                     }
                 }
@@ -181,13 +210,32 @@ public class PlayerBehaviour : MonoBehaviour
                         interactText.enabled = false;
                     }
                 }
-                
+
                 else
                 {
                     // If the DoorBehaviour component is missing, log a warning
-                Debug.LogWarning("Door object found but DoorBehaviour component is missing on: " + hitObject.name);
+                    Debug.LogWarning("Door object found but DoorBehaviour component is missing on: " + hitObject.name);
                 }
 
+            }
+
+            // Fridge Interaction
+            else if (hitObject.CompareTag("Fridge"))
+            {
+                FridgeBehaviour fridge = hitObject.GetComponent<FridgeBehaviour>();
+                if (fridge != null)
+                {
+                    interactText.text = "Press E to talk to fridge?";
+                    interactText.enabled = true;
+                    isLookingAtInteractable = true;
+
+                    if (Input.GetKeyDown(KeyCode.E) && Time.time - lastInteractTime > interactCooldown)
+                    {
+                        lastInteractTime = Time.time;
+                        fridge.Interact();
+                        interactText.enabled = false;
+                    }
+                }
             }
         }
 

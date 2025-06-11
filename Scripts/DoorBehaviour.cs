@@ -8,8 +8,6 @@ public class DoorBehaviour : MonoBehaviour
 
     public void Interact()
     {
-        Debug.Log("Door Interact() called at time: " + Time.time + " on " + gameObject.name);
-        
         if (!Open)
         {
             doorAudioSource.Play();
@@ -19,6 +17,7 @@ public class DoorBehaviour : MonoBehaviour
         }
         else
         {
+            doorAudioSource.Play();
             transform.Rotate(0, -90f, 0);
             Open = false;
         }

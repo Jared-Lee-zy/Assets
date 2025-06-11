@@ -2,17 +2,16 @@ using UnityEngine;
 
 public class LockedDoorBehaviour : MonoBehaviour
 {
-    void OpenDoor()
-    {
-        Destroy(gameObject);
-    }
+    [SerializeField]
+    AudioSource lockedDoorAudioSource;
     
     public void Unlock(PlayerBehaviour player)
     {
         if (player.Haskeycard())
         {
             Debug.Log("Door unlcked!");
-            OpenDoor();
+            lockedDoorAudioSource.Play();
+            Destroy(gameObject, lockedDoorAudioSource.clip.length);
         }
         else
         {
