@@ -7,11 +7,15 @@ public class giftBox : MonoBehaviour
 
     [SerializeField]
     Transform spawnPoint;
+
+    private bool isBroken = false;
     void OnCollisionEnter(Collision collision)
     {
+        if (isBroken) return;
 
         if (collision.gameObject.CompareTag("Projectile"))
         {
+            isBroken = true;
             Instantiate(matchaPrefab, spawnPoint.position, spawnPoint.rotation);
             Destroy(collision.gameObject);
             Destroy(gameObject);

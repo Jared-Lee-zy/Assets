@@ -2,13 +2,24 @@ using System;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEditor.Formats.Fbx.Exporter;
 
 public class PlayerBehaviour : MonoBehaviour
 {
 
     int score = 0;
 
+    public int GetScore()
+    {
+        return score;
+    }
+
     int deathCount = 0;
+
+    public int GetDeathCount()
+    {
+        return deathCount;
+    }
 
     MatchaBehaviour currentMatcha;
 
@@ -246,6 +257,25 @@ public class PlayerBehaviour : MonoBehaviour
                     }
                 }
             }
+
+            // End Fridge Innteraction
+            else if (hitObject.CompareTag("EndFridge"))
+            {
+                EndFridgeBehaviour endFridge = hitObject.GetComponent<EndFridgeBehaviour>();
+                if (endFridge != null)
+                {
+                    interactText.text = "Press E to talk to Fridge of Congratulations!";
+                    interactText.enabled = true;
+                    isLookingAtInteractable = true;
+
+                    if (Input.GetKeyDown(KeyCode.E) && Time.time - lastInteractTime > interactCooldown)
+                    {
+                        lastInteractTime = Time.time;
+                        endFridge.Interact(this);
+                        interactText.enabled = false;
+                    }
+                }
+            }
         }
 
         // Clear highlights and UI if not looking at an interactable
@@ -261,11 +291,16 @@ public class PlayerBehaviour : MonoBehaviour
         }
     }
 
+    bool isRespawning = false;
     void OnTriggerEnter(Collider other)
     {
+        if (isRespawning) return;
+
         if (other.CompareTag("Coffee"))
         {
             Debug.Log("Player entered trigger");
+
+            isRespawning = true;
 
             deathCount++;
             deathCountText.text = "DEATHS: " + deathCount;
@@ -284,6 +319,14 @@ public class PlayerBehaviour : MonoBehaviour
             }
 
             Debug.Log("Player respawned at: " + transform.position);
-        }   
+
+            Invoke(nameof(ResetRespawn), 0.5f);
+        }
     }
+
+    void ResetRespawn()
+    {
+        isRespawning = false;
+    }
+
 }
