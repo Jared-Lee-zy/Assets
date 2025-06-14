@@ -1,6 +1,10 @@
 using UnityEngine;
 
-// Controls the behaviour of the gift box that spawns matcha when hit by a projectile.
+/*
+ * Author : Jared Lee
+ * Date of Creation : 30th April 2025
+ * Script Function : Controls the behaviour of the gift box in the game that spawns a matcha collectible when broken by a projectile.
+ */
 public class giftBox : MonoBehaviour
 {
     // Prefab of the matcha collectible that spawns when the gift box is broken by the projectile.

@@ -1,6 +1,10 @@
 using UnityEngine;
 
-// Controls the behaviour of a door in the game that can be opened and closed by the player.
+/*
+ * Author : Jared Lee
+ * Date of Creation : 19th April 2025
+ * Script Function : Controls the behaviour of the door in the game that can be opened and closed by the player.
+ */
 public class DoorBehaviour : MonoBehaviour
 {
     // Tracks whether the door is currently opened or closed.

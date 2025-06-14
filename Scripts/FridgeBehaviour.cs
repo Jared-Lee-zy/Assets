@@ -1,6 +1,10 @@
 using UnityEngine;
 
-// Controls the behaviour of the fridge in the game that plays a sound when interacted with.
+/*
+ * Author : Jared Lee
+ * Date of Creation : 9th June 2025
+ * Script Function : Controls the behaviour of the fridge in the game that plays a sound when interacted with.
+ */
 public class FridgeBehaviour : MonoBehaviour
 {
     // Audio source that plays when the fridge is interacted with.

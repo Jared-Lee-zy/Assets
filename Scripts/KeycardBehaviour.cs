@@ -1,6 +1,10 @@
 using UnityEngine;
 
-// Controls the behaviour of the keycard collectible in the game.
+/*
+ * Author : Jared Lee
+ * Date of Creation : 10th June 2025
+ * Script Function : Controls the behaviour of the keycard collectible in the game.
+ */
 public class keycardBehaviour : MonoBehaviour
 {
     // Audio source that plays when the keycard is collected.

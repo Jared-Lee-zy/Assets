@@ -4,7 +4,11 @@ using TMPro;
 using UnityEngine.UI;
 using UnityEditor.Formats.Fbx.Exporter;
 
-// Handles player related behaviours such as score, death count, UI updates and interactions with matcha, keycards, doors, locked door, fridge and end fridge.
+/*
+ * Author : Jared Lee
+ * Date of Creation : 19th April 2025
+ * Script Function : Controls the player's behaviour in the game, including score tracking, death count, interactions with matcha objects, keycard handling, projectile firing, and respawning.
+ */
 public class PlayerBehaviour : MonoBehaviour
 {
     // Tracks the player's score

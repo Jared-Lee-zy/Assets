@@ -1,7 +1,11 @@
 using TMPro;
 using UnityEngine;
 
-// Controls the behaviour of the end fridge in the game that displays the end screen with score and death count when interacted with.
+/*
+ * Author : Jared Lee
+ * Date of Creation : 13th April 2025
+ * Script Function : Controls the behaviour of the end fridge in the game that displays the end screen with the player's final score and final death count when interacted with.
+ */
 public class EndFridgeBehaviour : MonoBehaviour
 {
     // Reference to the end screen UI element that is displayed when the end fridge is interacted with.

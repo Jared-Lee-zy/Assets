@@ -1,6 +1,10 @@
 using UnityEngine;
 
-// Controls the behaviour of locked door in the game that requires a keycard to unlock.
+/*
+ * Author : Jared Lee
+ * Date of Creation : 10th June 2025
+ * Script Function : Controls the behaviour of the locked door in the game that can be unlocked by the player using a keycard.
+ */
 public class LockedDoorBehaviour : MonoBehaviour
 {
     // Audio source that plays when the door is unlocked.
